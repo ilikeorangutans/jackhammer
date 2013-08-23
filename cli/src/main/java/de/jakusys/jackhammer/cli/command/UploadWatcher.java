@@ -123,6 +123,8 @@ public class UploadWatcher extends RemoteCommand {
 				parent = node.getNode(PathRelativizer.relativize(root, file.getParentFile()));
 				System.out.println("parent.getPath() = " + parent.getPath());
 				JcrUtils.putFile(parent, file.getName(), "text/plain", new FileInputStream(file));
+
+				session.save();
 			} catch (RepositoryException e) {
 				e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
 			} catch (FileNotFoundException e) {
@@ -135,7 +137,7 @@ public class UploadWatcher extends RemoteCommand {
 		public void onFileChange(File file) {
 			String path = PathRelativizer.relativize(root, file);
 			System.out.println("^ " + path);
-			
+
 		}
 
 		@Override
