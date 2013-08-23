@@ -15,10 +15,7 @@
  */
 package de.jakusys.jackhammer.cli;
 
-import de.jakusys.jackhammer.cli.command.Connect;
-import de.jakusys.jackhammer.cli.command.DownloadFile;
-import de.jakusys.jackhammer.cli.command.UploadFile;
-import de.jakusys.jackhammer.cli.command.UploadWatcher;
+import de.jakusys.jackhammer.cli.command.*;
 import io.airlift.command.Cli;
 import io.airlift.command.Help;
 
@@ -45,6 +42,12 @@ public class Jackhammer {
 				.withDescription("Download things from the server")
 				.withDefaultCommand(Help.class)
 				.withCommand(DownloadFile.class);
+
+		builder
+				.withGroup("browse")
+				.withDescription("Browse the repository")
+				.withDefaultCommand(ListCommand.class)
+				.withCommands(ListCommand.class);
 
 		Cli<Runnable> cli = builder.build();
 		cli.parse(args).run();

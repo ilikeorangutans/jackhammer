@@ -15,16 +15,46 @@
  */
 package de.jakusys.jackhammer.cli.command;
 
+import io.airlift.command.Arguments;
 import io.airlift.command.Command;
+
+import javax.jcr.Node;
+import javax.jcr.NodeIterator;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
 
 /**
  * @author Jakob Külzer
  */
 @Command(name = "list", description = "Lists nodes")
-public class ListCommand implements  Runnable{
+public class ListCommand extends RemoteCommand implements Runnable {
+
+	@Arguments(title = "path", required = true)
+	private String path;
 
 	@Override
 	public void run() {
+
+		try {
+			final Session session = getSession();
+
+			final String relativePath = path.startsWith("/") ? path.substring(1) : path;
+
+			Node node = session.getRootNode();
+			if (!"".equals(relativePath))
+				node = session.getRootNode().getNode(relativePath);
+
+			System.out.println(node.getPath() + " [" + node.getPrimaryNodeType().getName() + "]");
+
+			for (NodeIterator ni = node.getNodes(); ni.hasNext(); ) {
+				Node child = ni.nextNode();
+
+				System.out.println(String.format("  %-20s [%s]", child.getName(), child.getPrimaryNodeType().getName()));
+			}
+
+		} catch (RepositoryException e) {
+			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+		}
 
 	}
 }
