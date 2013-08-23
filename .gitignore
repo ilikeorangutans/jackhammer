@@ -2,6 +2,9 @@
 atlassian-ide-plugin.xml
 .idea
 target
+.settings
+.project
+.classpath
 
 dependency-reduced-pom.xml
 
