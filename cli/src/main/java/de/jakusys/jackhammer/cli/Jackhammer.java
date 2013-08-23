@@ -3,6 +3,7 @@ package de.jakusys.jackhammer.cli;
 import de.jakusys.jackhammer.cli.command.Connect;
 import de.jakusys.jackhammer.cli.command.DownloadFile;
 import de.jakusys.jackhammer.cli.command.UploadFile;
+import de.jakusys.jackhammer.cli.command.UploadWatcher;
 import io.airlift.command.Cli;
 import io.airlift.command.Help;
 
@@ -22,7 +23,7 @@ public class Jackhammer {
 				.withGroup("upload")
 				.withDescription("Uploads things to the server")
 				.withDefaultCommand(UploadFile.class)
-				.withCommand(UploadFile.class);
+				.withCommands(UploadFile.class, UploadWatcher.class);
 
 		builder
 				.withGroup("download")
