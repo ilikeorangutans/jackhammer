@@ -13,21 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.jakusys.jackhammer.cli.util;
+package de.jakusys.jackhammer.cli.command;
 
-import org.hamcrest.Matchers;
-import org.junit.Assert;
-import org.junit.Test;
-
-import java.io.File;
+import io.airlift.command.Command;
 
 /**
- * @author jakobk
+ * @author Jakob Külzer
  */
-public class PathRelativizerTest {
+@Command(name = "list", description = "Lists nodes")
+public class ListCommand implements  Runnable{
 
-	@Test
-	public void testFoo() {
-		Assert.assertThat(PathRelativizer.relativize(new File("foo"), new File("foo/bar")), Matchers.is("bar"));
+	@Override
+	public void run() {
+
 	}
 }
