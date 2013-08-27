@@ -13,31 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.jakusys.jackhammer.cli.command;
+package de.jakusys.jackhammer.cli.profile;
 
-import com.google.inject.Inject;
-import de.jakusys.jackhammer.cli.profile.Profile;
-import io.airlift.command.Command;
-
-import javax.jcr.Session;
+import java.net.URL;
 
 /**
+ * Connection profile.
+ *
  * @author Jakob Külzer
  */
-@Command(name = "connect", description = "Tests connection to the server with the given parameters.")
-public class Connect implements Runnable {
+public interface Profile {
 
-	@Inject
-	private Session session;
+	String getName();
 
-	@Inject
-	private Profile profile;
+	String getUsername();
 
-	@Override
-	public void run() {
+	String getPassword();
 
-		System.out.println("    Profile: " + profile);
-		System.out.println("    Session: " + session);
-	}
+	URL getHost();
 
 }

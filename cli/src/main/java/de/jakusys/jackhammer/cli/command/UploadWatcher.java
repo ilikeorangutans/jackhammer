@@ -15,6 +15,7 @@
  */
 package de.jakusys.jackhammer.cli.command;
 
+import com.google.inject.Inject;
 import io.airlift.command.Arguments;
 import io.airlift.command.Command;
 import io.airlift.command.Option;
@@ -28,25 +29,25 @@ import javax.jcr.Session;
 import java.io.File;
 
 /**
- * @author jakobk
+ * @author Jakob Külzer
  */
-@Command(name = "watch", description = "Watch a root for changes and automatically upload them")
-public class UploadWatcher extends RemoteCommand {
+@Command(name = "watch", description = "Watch a directory for changes and automatically upload them")
+public class UploadWatcher implements Runnable {
 
-	@Option(name = "-p", description = "Root path in the JCR for uploads, defaults to \"/\"")
+	@Option(name = "--to", description = "Root path in the JCR for uploads, defaults to \"/\"")
 	private String rootPath = "";
 
-	@Arguments(title = "root", description = "Directory to watch for filesystem changes")
+	@Arguments(title = "directory", description = "Directory to watch for filesystem changes")
 	private File directory;
+
+	@Inject
+	private Session session;
 
 	@Override
 	public void run() {
 
-		Session session;
-
 		Node node;
 		try {
-			session = getSession();
 
 			if ("".equals(rootPath)) {
 				node = session.getRootNode();
@@ -59,7 +60,7 @@ public class UploadWatcher extends RemoteCommand {
 				node = session.getRootNode().getNode(tmp);
 			}
 		} catch (RepositoryException e) {
-			throw new RuntimeException(e);
+			throw new RuntimeException("Unable to get node", e);
 		}
 
 		FileAlterationObserver observer = new FileAlterationObserver(directory);
@@ -70,10 +71,11 @@ public class UploadWatcher extends RemoteCommand {
 
 		monitor.addObserver(observer);
 		try {
+			System.out.println("Watching " + directory.getCanonicalPath() + " and uploading changes to " + node.getPath());
 			monitor.start();
 
 		} catch (Exception e) {
-			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+			throw new RuntimeException("Unable to monitor files", e);
 		}
 	}
 

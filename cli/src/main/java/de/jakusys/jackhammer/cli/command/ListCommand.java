@@ -15,6 +15,7 @@
  */
 package de.jakusys.jackhammer.cli.command;
 
+import com.google.inject.Inject;
 import io.airlift.command.Arguments;
 import io.airlift.command.Command;
 
@@ -27,16 +28,18 @@ import javax.jcr.Session;
  * @author Jakob Külzer
  */
 @Command(name = "list", description = "Lists nodes")
-public class ListCommand extends RemoteCommand implements Runnable {
+public class ListCommand implements Runnable {
 
 	@Arguments(title = "path", required = true)
 	private String path;
+
+	@Inject
+	private Session session;
 
 	@Override
 	public void run() {
 
 		try {
-			final Session session = getSession();
 
 			final String relativePath = path.startsWith("/") ? path.substring(1) : path;
 
@@ -53,7 +56,7 @@ public class ListCommand extends RemoteCommand implements Runnable {
 			}
 
 		} catch (RepositoryException e) {
-			e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+			throw new RuntimeException("Could not list profiles", e);
 		}
 
 	}

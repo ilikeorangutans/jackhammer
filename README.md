@@ -33,6 +33,7 @@ Jackhammer you can:
 
 Planned functionality:
 
+* Write scripts for bash, command line, etc to start Jackhammer
 * Complete file management, that means not just creating files but updating, deleting, potentially moving files (even
   though I'm not sure if I can determine this from the filesystem)
 * Nicer configuration management and profiles
@@ -41,3 +42,86 @@ Planned functionality:
 * Interactive shell to browse the repository
 * And many more...
 
+## Usage
+
+Jackhammer is a command line application. Here's a few samples of how to use it:
+
+### Test Connection
+
+Test connection with default profile (connecting to a CRX instance):
+
+    $ jackhammer connect
+        Profile: ImmutableProfile{name=<system default>, host=http://localhost:4402/crx/server, username=admin, password=yes}
+        Session: org.apache.jackrabbit.jcr2spi.SessionImpl@22b5d678
+
+### Profiles
+
+Profiles store connection configuration. List profiles:
+
+    $ jackhammer profile
+    Available ProfileFacade:
+
+    Default Profile:
+        <system default> admin <password set> http://localhost:4402/crx/server
+
+Add a profile:
+
+    $ jackhammer profile add test -h http://nna-int-cms1.criticalmass.com:4504/crx/server -u admin -p admin
+    Saving profile test...
+    name = test
+
+Set default profile:
+
+    jackhammer profile default test
+
+
+### Listing
+
+Jackhammer can list nodes in the JCR:
+
+    $ jackhammer list /
+    / [rep:root]
+      rep:repoPolicy       [rep:ACL]
+      META-INF             [nt:folder]
+      crx                  [nt:unstructured]
+      bin                  [nt:folder]
+      rep:policy           [rep:ACL]
+      jcr:system           [rep:system]
+      var                  [sling:Folder]
+      libs                 [nt:folder]
+      etc                  [sling:Folder]
+      apps                 [nt:folder]
+      content              [sling:OrderedFolder]
+      home                 [rep:AuthorizableFolder]
+      tmp                  [sling:Folder]
+
+### Uploading
+
+And the primary reason you'll want to use Jackhammer: watching folders and uploading files. Let's monitor the test
+folder and mirror all changes from it to ``/tmp``:
+
+    jackhammer upload watch test --to /tmp
+    Watching /Users/jakobk/Documents/personal/jackhammer/cli/test and uploading changes to /tmp
+
+In a different terminal, we create a new folder in the test folder:
+
+    mkdir test/jackhammer
+
+And Jackhammer promptly responds with:
+
+    + jackhammer/
+
+Same goes for files:
+
+    echo "Jackhammer is awesome!" > test/jackhammer/awesome.txt
+
+Results in:
+
+    + jackhammer/awesome.txt
+
+And now we can check if they exist:
+
+    $ jackhammer list /tmp/jackhammer
+    Connecting to http://localhost:4402/crx/server with username admin...
+    /tmp/jackhammer [nt:folder]
+      awesome.txt          [nt:file]

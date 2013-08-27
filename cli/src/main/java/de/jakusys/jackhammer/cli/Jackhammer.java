@@ -15,7 +15,14 @@
  */
 package de.jakusys.jackhammer.cli;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import de.jakusys.jackhammer.cli.command.*;
+import de.jakusys.jackhammer.cli.module.JackhammerModule;
+import de.jakusys.jackhammer.cli.profile.command.AddProfileCommand;
+import de.jakusys.jackhammer.cli.profile.command.DeleteProfileCommand;
+import de.jakusys.jackhammer.cli.profile.command.ListProfilesCommand;
+import de.jakusys.jackhammer.cli.profile.command.SetDefaultProfileCommand;
 import io.airlift.command.Cli;
 import io.airlift.command.Help;
 
@@ -26,16 +33,22 @@ public class Jackhammer {
 
 	public static void main(String[] args) {
 
-		Cli.CliBuilder<Runnable> builder = Cli.<Runnable>builder("jackhammer")
+		final Cli.CliBuilder<Runnable> builder = Cli.<Runnable>builder("jackhammer")
 				.withDescription("The JCR power tool!")
-				.withCommands(Help.class, Connect.class)
-				.withDefaultCommand(Help.class);
+				.withDefaultCommand(Help.class)
+				.withCommands(
+						Help.class,
+						Connect.class,
+						ListCommand.class
+				);
 
 		builder
 				.withGroup("upload")
 				.withDescription("Uploads things to the server")
 				.withDefaultCommand(UploadFile.class)
-				.withCommands(UploadFile.class, UploadWatcher.class);
+				.withCommands(
+						UploadFile.class,
+						UploadWatcher.class);
 
 		builder
 				.withGroup("download")
@@ -44,13 +57,25 @@ public class Jackhammer {
 				.withCommand(DownloadFile.class);
 
 		builder
-				.withGroup("browse")
-				.withDescription("Browse the repository")
-				.withDefaultCommand(ListCommand.class)
-				.withCommands(ListCommand.class);
+				.withGroup("profile")
+				.withDescription("Create, edit, list or remove profiles")
+				.withDefaultCommand(ListProfilesCommand.class)
+				.withCommands(
+						ListProfilesCommand.class,
+						AddProfileCommand.class,
+						DeleteProfileCommand.class,
+						SetDefaultProfileCommand.class);
 
-		Cli<Runnable> cli = builder.build();
-		cli.parse(args).run();
+		final Cli<Runnable> cli = builder.build();
+		final Runnable runnable = cli.parse(args);
+
+		// Don't inject into Help. It uses @Inject internally, but doesn't provide the constructor that Guice expects.
+		// Ugly.
+		if (!(runnable instanceof Help)) {
+			final Injector injector = Guice.createInjector(new JackhammerModule(args));
+			injector.injectMembers(runnable);
+		}
+		runnable.run();
 
 	}
 
