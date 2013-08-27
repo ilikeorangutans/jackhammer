@@ -66,7 +66,7 @@ Profiles store connection configuration. List profiles:
 
 Add a profile:
 
-    $ jackhammer profile add test -h http://nna-int-cms1.criticalmass.com:4504/crx/server -u admin -p admin
+    $ jackhammer profile add test -h http://localhost:4402/crx/server -u admin -p admin
     Saving profile test...
     name = test
 
