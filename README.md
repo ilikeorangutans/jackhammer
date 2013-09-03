@@ -7,6 +7,12 @@ tasks. Other functionality might follow if I find something that is useful.
 
 Currently Jackhammer connects to Apache Jackrabbit (tested with Jackrabbit 2.6.3) and Adobe CRX 2.x.
 
+## Download
+
+Releases:
+
+* [0.0.1 cli app](https://github.com/ilikeorangutans/maven-repo/raw/master/releases/jackhammer/cli/0.0.1/cli-0.0.1.jar)
+
 ## Use case
 
 Jackhammer is written primarily for developers that work with JCR based systems. For example, with Adobe CQ (or WEM or
