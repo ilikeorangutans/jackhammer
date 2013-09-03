@@ -31,20 +31,20 @@ JCR instance.
 As of now, Jackhammer uploads and downloads files from the JCR. It's all still in development, but kind of works. With
 Jackhammer you can:
 
-* Download single files from a JCR
-* Upload a single file into the JCR
-* Watch a local directory for changes. New local directories, and files will automatically be created on the server.
+* [x] Download single files from a JCR
+* [x] Upload a single file into the JCR
+* [x] Watch a local directory for changes. New local directories, and files will automatically be created on the server.
 
 Planned functionality:
 
-* Write scripts for bash, command line, etc to start Jackhammer
-* Complete file management, that means not just creating files but updating, deleting, potentially moving files (even
+* [ ] Write scripts for bash, command line, etc to start Jackhammer
+* [ ] Complete file management, that means not just creating files but updating, deleting, potentially moving files (even
   though I'm not sure if I can determine this from the filesystem)
-* Nicer configuration management and profiles
-* Support for more complex node structures and XML serialization/deserialization
-* Play well with Adobe vlt, support Adobe WEM structures
-* Interactive shell to browse the repository
-* And many more...
+* [x] Nicer configuration management and profiles
+* [ ] Support for more complex node structures and XML serialization/deserialization
+* [ ] Play well with Adobe vlt, support Adobe WEM structures
+* [ ] Interactive shell to browse the repository
+* [ ] And many more...
 
 ## Usage
 
