@@ -113,7 +113,7 @@ public class ProfileFacade implements Provider<Profile> {
 		try {
 			return new ImmutableProfile(node.get(NAME, ""), new URL(node.get(URL, "")), node.get(USERNAME, ""), node.get(PASSWORD, ""));
 		} catch (MalformedURLException e) {
-			throw new RuntimeException("Unable to create profile", e);
+			throw new RuntimeException("Unable to handle profile", e);
 		}
 	}
 
