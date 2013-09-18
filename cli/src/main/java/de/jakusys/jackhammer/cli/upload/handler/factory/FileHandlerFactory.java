@@ -13,31 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.jakusys.jackhammer.cli.command;
+package de.jakusys.jackhammer.cli.upload.handler.factory;
 
-import com.google.inject.Inject;
-import de.jakusys.jackhammer.cli.profile.Profile;
-import io.airlift.command.Command;
+import de.jakusys.jackhammer.cli.upload.handler.FileHandler;
+import de.jakusys.jackhammer.cli.upload.handler.Operation;
 
-import javax.jcr.Session;
+import java.io.File;
 
 /**
  * @author Jakob Külzer
  */
-@Command(name = "connect", description = "Tests connection to the server with the given parameters.")
-public class Connect implements Runnable {
+public interface FileHandlerFactory {
 
-	@Inject
-	private Session session;
-
-	@Inject
-	private Profile profile;
-
-	@Override
-	public void run() {
-
-		System.out.println("    Profile: " + profile);
-		System.out.println("    Session: " + session);
-	}
+	/**
+	 * Create an appropriate instance of FileHandler to deal with the given file.
+	 *
+	 * @param file
+	 * @return
+	 */
+	FileHandler create(Operation operation, File file);
 
 }

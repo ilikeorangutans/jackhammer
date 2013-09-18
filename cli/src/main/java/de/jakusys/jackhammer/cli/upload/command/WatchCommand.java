@@ -13,9 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.jakusys.jackhammer.cli.command;
+package de.jakusys.jackhammer.cli.upload.command;
 
+import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
+import de.jakusys.jackhammer.cli.path.Path;
+import de.jakusys.jackhammer.cli.upload.event.LoggingEventListener;
+import de.jakusys.jackhammer.cli.upload.event.UploadingEventListener;
+import de.jakusys.jackhammer.cli.upload.handler.factory.DefaultFileHandlerFactory;
+import de.jakusys.jackhammer.cli.upload.listener.JackhammerFileAlternationListener;
+import de.jakusys.jackhammer.cli.util.PathRelativizer;
 import io.airlift.command.Arguments;
 import io.airlift.command.Command;
 import io.airlift.command.Option;
@@ -32,7 +39,7 @@ import java.io.File;
  * @author Jakob Külzer
  */
 @Command(name = "watch", description = "Watch a directory for changes and automatically upload them")
-public class UploadWatcher implements Runnable {
+public class WatchCommand implements Runnable {
 
 	@Option(name = "--to", description = "Root path in the JCR for uploads, defaults to \"/\"")
 	private String rootPath = "";
@@ -49,23 +56,31 @@ public class UploadWatcher implements Runnable {
 		Node node;
 		try {
 
-			if ("".equals(rootPath)) {
+			String tmp = rootPath;
+			if (rootPath.startsWith("/"))
+				tmp = rootPath.substring(1);
+
+			if ("".equals(tmp)) {
 				node = session.getRootNode();
 			} else {
-
-				String tmp = rootPath;
-				if (rootPath.startsWith("/"))
-					tmp = rootPath.substring(1);
-
 				node = session.getRootNode().getNode(tmp);
 			}
 		} catch (RepositoryException e) {
 			throw new RuntimeException("Unable to get node", e);
 		}
 
-		FileAlterationObserver observer = new FileAlterationObserver(directory);
-		FileAlterationMonitor monitor = new FileAlterationMonitor(1000);
-		FileAlterationListener listener = new UploadingFileAlternationListener(directory, session, node);
+		final DefaultFileHandlerFactory fileHandlerFactory = new DefaultFileHandlerFactory(new PathRelativizer(directory));
+
+		final EventBus eventBus = new EventBus();
+		eventBus.register(new LoggingEventListener(new Path(rootPath)));
+		eventBus.register(new UploadingEventListener(fileHandlerFactory, session, node));
+
+		final FileAlterationObserver observer = new FileAlterationObserver(directory);
+		final FileAlterationMonitor monitor = new FileAlterationMonitor(1000);
+
+		PathRelativizer pathRelativizer = new PathRelativizer(directory);
+
+		FileAlterationListener listener = new JackhammerFileAlternationListener(eventBus, pathRelativizer);
 
 		observer.addListener(listener);
 

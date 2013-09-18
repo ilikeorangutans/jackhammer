@@ -27,7 +27,7 @@ import javax.jcr.Session;
 import java.io.*;
 
 /**
- * @author jakobk
+ * @author Jakob Külzer
  */
 @Command(name = "file", description = "Download a single file")
 public class DownloadFile extends RemoteCommand {

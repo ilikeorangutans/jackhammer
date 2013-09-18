@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.jakusys.jackhammer.cli.command;
+package de.jakusys.jackhammer.cli.upload.command;
 
+import de.jakusys.jackhammer.cli.command.RemoteCommand;
 import io.airlift.command.Arguments;
 import io.airlift.command.Command;
 import io.airlift.command.Option;
-import org.apache.jackrabbit.commons.JcrUtils;
 
 import javax.jcr.Node;
 import javax.jcr.RepositoryException;
@@ -26,10 +26,12 @@ import javax.jcr.Session;
 import java.io.File;
 
 /**
- * @author jakobk
+ * Command to upload a single file.
+ *
+ * @author Jakob Külzer
  */
 @Command(name = "file", description = "Upload a single file to the JCR")
-public class UploadFile extends RemoteCommand {
+public class UploadFileCommand extends RemoteCommand {
 
 	@Arguments(title = "file", description = "File to upload", required = true)
 	private File file;
@@ -48,8 +50,6 @@ public class UploadFile extends RemoteCommand {
 			Node node = session.getRootNode().getNode(path);
 
 			System.out.println("node = " + node);
-
-
 
 		} catch (RepositoryException e) {
 			throw new RuntimeException(e);

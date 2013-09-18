@@ -28,6 +28,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
+/**
+ * @author Jakob Külzer
+ */
 public class UploadingFileAlternationListener implements FileAlterationListener {
 
 	private final File root;

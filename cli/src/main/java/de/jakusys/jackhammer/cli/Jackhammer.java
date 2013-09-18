@@ -17,12 +17,16 @@ package de.jakusys.jackhammer.cli;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import de.jakusys.jackhammer.cli.command.*;
+import de.jakusys.jackhammer.cli.command.DownloadFile;
+import de.jakusys.jackhammer.cli.command.browse.ListCommand;
+import de.jakusys.jackhammer.cli.command.misc.TestConnectionCommand;
 import de.jakusys.jackhammer.cli.module.JackhammerModule;
 import de.jakusys.jackhammer.cli.profile.command.AddProfileCommand;
 import de.jakusys.jackhammer.cli.profile.command.DeleteProfileCommand;
 import de.jakusys.jackhammer.cli.profile.command.ListProfilesCommand;
 import de.jakusys.jackhammer.cli.profile.command.SetDefaultProfileCommand;
+import de.jakusys.jackhammer.cli.upload.command.UploadFileCommand;
+import de.jakusys.jackhammer.cli.upload.command.WatchCommand;
 import io.airlift.command.Cli;
 import io.airlift.command.Help;
 
@@ -31,6 +35,7 @@ import io.airlift.command.Help;
  */
 public class Jackhammer {
 
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 
 		final Cli.CliBuilder<Runnable> builder = Cli.<Runnable>builder("jackhammer")
@@ -38,17 +43,17 @@ public class Jackhammer {
 				.withDefaultCommand(Help.class)
 				.withCommands(
 						Help.class,
-						Connect.class,
-						ListCommand.class
+						TestConnectionCommand.class,
+						ListCommand.class,
+						WatchCommand.class
 				);
 
 		builder
 				.withGroup("upload")
 				.withDescription("Uploads things to the server")
-				.withDefaultCommand(UploadFile.class)
+				.withDefaultCommand(UploadFileCommand.class)
 				.withCommands(
-						UploadFile.class,
-						UploadWatcher.class);
+						UploadFileCommand.class);
 
 		builder
 				.withGroup("download")
