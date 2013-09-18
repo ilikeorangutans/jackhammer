@@ -15,17 +15,34 @@
  */
 package de.jakusys.jackhammer.cli.util;
 
+import de.jakusys.jackhammer.cli.path.Path;
+
 import java.io.File;
 
 /**
- * @author jakobk
+ * @author Jakob Külzer
  */
 public class PathRelativizer {
 
+	/**
+	 * Returns the path of <tt>file</tt> relative to <tt>base</tt> as a string.
+	 *
+	 * @param base
+	 * @param file
+	 * @return
+	 */
 	public static String relativize(File base, File file) {
-
 		return base.toURI().relativize(file.toURI()).getPath();
+	}
 
+	private final File baseDir;
+
+	public PathRelativizer(File baseDir) {
+		this.baseDir = baseDir;
+	}
+
+	public Path relativize(File file) {
+		return new Path(baseDir.toURI().relativize(file.toURI()).getPath());
 	}
 
 }
