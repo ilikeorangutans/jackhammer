@@ -48,8 +48,10 @@ public class CreateAndUpdateFileFileHandler implements FileHandler {
 
 		try {
 
-
-			Node folder = JcrUtils.getOrAddFolder(rootNode, path.getParent().toString());
+			String parentPath = path.getParent().toString();
+			Node folder = rootNode;
+			if (!parentPath.isEmpty())
+				folder = JcrUtils.getOrAddFolder(rootNode, parentPath);
 
 			final String contentType = mimetypesFileTypeMap.getContentType(file);
 			JcrUtils.putFile(folder, file.getName(), contentType, new FileInputStream(file));
