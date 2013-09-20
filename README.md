@@ -20,7 +20,14 @@ Currently Jackhammer connects to Apache Jackrabbit (tested with Jackrabbit 2.6.3
 
 ## Releases
 
+* jackhammer-0.0.2 or download the [command line app](https://github.com/ilikeorangutans/maven-repo/blob/master/releases/jackhammer/cli/0.0.2/cli-0.0.2.jar)
 * [jackhammer-0.0.1](01a8cf8b30b721fbb90f89a13545f6af0f3378e8) or download the [command line app](https://github.com/ilikeorangutans/maven-repo/raw/master/releases/jackhammer/cli/0.0.1/cli-0.0.1.jar)
+
+## What's New?
+
+* **0.0.2** Changed the command line options quite a bit. Now they should be more fluent. For example, instead of
+  ``upload watch <directory>`` you can now just type ``watch <directory>``. Also, Jackhammer will now delete files that
+  you remove locally.
 
 ## Use case
 
@@ -115,7 +122,7 @@ Jackhammer can list nodes in the JCR:
 And the primary reason you'll want to use Jackhammer: watching folders and uploading files. Let's monitor the test
 folder and mirror all changes from it to ``/tmp``:
 
-    jackhammer upload watch test --to /tmp
+    jackhammer watch test --to /tmp
     Watching /Users/jakobk/Documents/personal/jackhammer/cli/test and uploading changes to /tmp
 
 In a different terminal, we create a new folder in the test folder:
