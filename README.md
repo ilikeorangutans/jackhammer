@@ -20,7 +20,7 @@ Currently Jackhammer connects to Apache Jackrabbit (tested with Jackrabbit 2.6.3
 
 ## Releases
 
-* jackhammer-0.0.2 or download the [command line app](https://github.com/ilikeorangutans/maven-repo/blob/master/releases/jackhammer/cli/0.0.2/cli-0.0.2.jar)
+* jackhammer-0.0.2 or download the [command line app](https://github.com/ilikeorangutans/maven-repo/raw/master/releases/jackhammer/cli/0.0.2/cli-0.0.2.jar)
 * [jackhammer-0.0.1](01a8cf8b30b721fbb90f89a13545f6af0f3378e8) or download the [command line app](https://github.com/ilikeorangutans/maven-repo/raw/master/releases/jackhammer/cli/0.0.1/cli-0.0.1.jar)
 
 ## What's New?
