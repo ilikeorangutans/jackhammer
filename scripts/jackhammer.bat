@@ -1,6 +1,6 @@
 @ECHO OFF
 
-F "%JACKHAMMER_HOME%" == "" GOTO NEED-PATH
+iF "%JACKHAMMER_HOME%" == "" GOTO NEED-PATH
 
 java -jar "%JACKHAMMER_HOME%\cli-0.0.2.jar" %*
 GOTO END
