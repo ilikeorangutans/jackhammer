@@ -53,6 +53,11 @@ public class WatchCommand implements Runnable {
 	@Override
 	public void run() {
 
+        if (!directory.exists()) {
+            System.out.println("Cannot watch directory " + directory.getPath() + ". The specified path could not be found.");
+            return;
+        }
+
 		Node node;
 		try {
 
